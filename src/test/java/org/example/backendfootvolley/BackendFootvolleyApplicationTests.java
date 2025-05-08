@@ -6,8 +6,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ActiveProfiles("test")
-@SpringBootTest
+@ActiveProfiles(value = "test")
+@SpringBootTest(classes = BackendFootvolleyApplication.class)
 class BackendFootvolleyApplicationTests {
 
     @Test
