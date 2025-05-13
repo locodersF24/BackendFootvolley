@@ -7,14 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class UserProfile {
+public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private String firstName;
+    @Column(nullable = false)
+    private String lastName;
     @Column(unique = true, nullable = false)
-    private String username;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    private Scope scope;
+    private String email;
 }

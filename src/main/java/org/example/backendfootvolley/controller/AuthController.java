@@ -1,11 +1,11 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backendfootvolley.model.UserProfile;
-import org.example.backendfootvolley.model.UsernameAndPassword;
-import org.example.backendfootvolley.model.UsernameAndRole;
-import org.example.backendfootvolley.repository.UserProfileRepository;
+import org.example.backendfootvolley.model.UserAccount;
+import org.example.backendfootvolley.dto.UserAccountDTO;
+import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.TokenService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,18 +21,19 @@ public class AuthController {
 
     private final TokenService tokenService;
     private final AuthenticationManager authenticationManager;
-    private final UserProfileRepository userProfileRepository;
+    private final UserAccountRepository userAccountRepository;
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/token")
-    public String token(@RequestBody UsernameAndPassword usernameAndPassword) throws AuthenticationException, InterruptedException {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usernameAndPassword.getUsername(), usernameAndPassword.getPassword()));
+    public String token(@RequestBody UserAccountDTO userAccountDTO) throws AuthenticationException {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAccountDTO.getEmail(), userAccountDTO.getPassword()));
         return tokenService.generateToken(authentication);
     }
 
     @GetMapping("/me")
-    public UsernameAndRole me(Principal principal) {
-        UserProfile userProfile = userProfileRepository.findByUsername(principal.getName()).get();
-        return new UsernameAndRole(userProfile.getUsername(), userProfile.getScope().toString());
+    public UserAccountDTO me(Principal principal) {
+        UserAccount userAccount = userAccountRepository.findByContact_Email(principal.getName()).get();
+        return new UserAccountDTO(userAccount);
     }
 
 }

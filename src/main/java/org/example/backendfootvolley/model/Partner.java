@@ -7,16 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class Club {
+public class Partner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
-    @OneToOne
-    @JoinColumn(unique = true, nullable = false)
-    private City city;
     private String logoBlobUrl;
-    @ManyToOne
-    private NationalFederation nationalFederation;
 }

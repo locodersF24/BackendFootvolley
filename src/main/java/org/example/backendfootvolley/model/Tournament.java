@@ -1,31 +1,40 @@
 package org.example.backendfootvolley.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private String name;
-    private String country;
+    private Long id;
+    private String location; // Should this be an entity like "Address"?
     private String city;
-    private int pointsAtStake;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private String partners;
-    private double prizeMoney;
-    private String category;
-
+    @ElementCollection
+    private List<Integer> pointsAtStake;
+    private LocalDate qualificationStartDate;
+    private LocalDate qualificationEndDate;
+    @Column(nullable = false)
+    private LocalDate finalsStartDate;
+    @Column(nullable = false)
+    private LocalDate finalsEndDate;
+    @ManyToMany
+    private Set<Partner> partners;
+    @ElementCollection
+    private Set<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
+    @Column(columnDefinition = "CHAR(3)", nullable = false)
+    private String currency; // ISO 4217
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Club club; //host_club_id?
+    private Club host;
     @ManyToOne
     @JoinColumn(nullable = false)
     private League league;
-
 }

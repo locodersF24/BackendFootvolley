@@ -1,19 +1,20 @@
 package org.example.backendfootvolley.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 public class Team {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @ManyToOne
-    private Player player1;
+    private Player playerA;
     @ManyToOne
-    private Player player2;
+    private Player playerB;
     @ManyToOne
     private Club club;
-
 }
