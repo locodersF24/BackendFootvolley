@@ -1,8 +1,6 @@
 package org.example.backendfootvolley;
 
-import org.example.backendfootvolley.model.Contact;
-import org.example.backendfootvolley.model.Scope;
-import org.example.backendfootvolley.model.UserAccount;
+import org.example.backendfootvolley.model.*;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
