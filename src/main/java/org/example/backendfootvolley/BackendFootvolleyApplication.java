@@ -24,8 +24,8 @@ public class BackendFootvolleyApplication {
         return args -> {
             Contact contact = new Contact();
             contact.setEmail("admin@admin.net");
-            contact.setFirstName("");
-            contact.setLastName("");
+            contact.setFirstName("admin");
+            contact.setLastName("admin");
             UserAccount userAccount = new UserAccount();
             userAccount.setContact(contact);
             userAccount.setPassword("{bcrypt}" + passwordEncoder.encode("admin123"));
