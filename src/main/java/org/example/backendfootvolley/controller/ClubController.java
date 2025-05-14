@@ -2,10 +2,7 @@ package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.UserAccountDTO;
-import org.example.backendfootvolley.model.Club;
-import org.example.backendfootvolley.model.Contact;
-import org.example.backendfootvolley.model.Scope;
-import org.example.backendfootvolley.model.UserAccount;
+import org.example.backendfootvolley.model.*;
 import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.springframework.http.HttpStatus;
@@ -70,5 +67,4 @@ public class ClubController {
         userAccountRepository.save(userAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
