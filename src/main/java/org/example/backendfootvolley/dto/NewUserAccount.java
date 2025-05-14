@@ -1,18 +1,13 @@
 package org.example.backendfootvolley.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import org.example.backendfootvolley.model.UserAccount;
 
 import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@ToString
-public class UserAccountDTO {
+public class NewUserAccount {
 
     private String email;
     private String firstName;
@@ -21,15 +16,7 @@ public class UserAccountDTO {
     private String established;
     private String country;
     private String city;
-    private String password; // Request only
-    private String role; // Response only
-
-    public UserAccountDTO(UserAccount userAccount) {
-        this.firstName = userAccount.getContact().getFirstName();
-        this.lastName = userAccount.getContact().getLastName();
-        this.email = userAccount.getContact().getEmail();
-        this.role = userAccount.getScope().toString();
-    }
+    private String password;
 
     public boolean containsUnexpectedInput() {
         List<String> input = List.of(email, firstName, lastName, clubName, established, country, city, password);

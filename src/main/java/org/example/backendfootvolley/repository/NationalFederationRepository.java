@@ -5,4 +5,3 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NationalFederationRepository extends JpaRepository<NationalFederation, Long> {
 }
-
