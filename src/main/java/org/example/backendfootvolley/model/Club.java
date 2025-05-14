@@ -15,7 +15,7 @@ public class Club {
     private String name;
     @Column(columnDefinition = "CHAR(4)", nullable = false)
     private String established;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(unique = true, nullable = false)
     private City city;
     private String logoBlobUrl;

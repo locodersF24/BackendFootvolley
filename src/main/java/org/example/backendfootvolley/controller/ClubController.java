@@ -58,12 +58,20 @@ public class ClubController {
         if (userAccountRepository.existsByContact_Email(userAccountDTO.getEmail())) {
             return new ResponseEntity<>("There is already an account with that email.", HttpStatus.CONFLICT);
         }
+        City city = new City();
+        city.setCountry(userAccountDTO.getCountry());
+        city.setName(userAccountDTO.getCity());
+        Club club = new Club();
+        club.setCity(city);
+        club.setName(userAccountDTO.getClubName());
+        club.setEstablished(userAccountDTO.getEstablished());
         Contact contact = new Contact();
         contact.setEmail(userAccountDTO.getEmail());
         contact.setFirstName(userAccountDTO.getFirstName());
         contact.setLastName(userAccountDTO.getLastName());
         UserAccount userAccount = new UserAccount();
         userAccount.setContact(contact);
+        userAccount.setClub(club);
         userAccount.setPassword("{bcrypt}" + passwordEncoder.encode(userAccountDTO.getPassword()));
         userAccount.setScope(Scope.CLUB);
         userAccountRepository.save(userAccount);
