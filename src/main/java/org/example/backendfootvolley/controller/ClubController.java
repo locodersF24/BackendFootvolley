@@ -77,5 +77,4 @@ public class ClubController {
         userAccountRepository.save(userAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
