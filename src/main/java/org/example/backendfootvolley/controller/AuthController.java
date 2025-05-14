@@ -24,13 +24,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserAccountRepository userAccountRepository;
 
-    @PreAuthorize("permitAll()")
     @PostMapping("/token")
     public String token(@RequestBody EmailAndPassword emailAndPassword) throws AuthenticationException {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(emailAndPassword.getEmail(), emailAndPassword.getPassword()));
         return tokenService.generateToken(authentication);
     }
 
+    @PreAuthorize("hasAnyAuthority('SCOPE_ADMIN', 'SCOPE_CLUB')")
     @GetMapping("/me")
     public UserAccountDTO me(Principal principal) {
         UserAccount userAccount = userAccountRepository.findByContact_Email(principal.getName()).get();
