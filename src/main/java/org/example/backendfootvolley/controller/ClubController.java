@@ -5,6 +5,7 @@ import org.example.backendfootvolley.dto.UserAccountDTO;
 import org.example.backendfootvolley.model.*;
 import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
+import org.example.backendfootvolley.service.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,6 +23,7 @@ public class ClubController {
     private final ClubRepository clubRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ClubService clubService;
 
     @PreAuthorize("hasAuthority('SCOPE_CLUB')")
     @GetMapping
@@ -41,6 +44,20 @@ public class ClubController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @GetMapping
+    public ResponseEntity<List<Club>> getAllClubs() {
+        return ResponseEntity.ok(clubService.getAllClubs());
+    }
+
+    @GetMapping("/{clubId}")
+    public ResponseEntity<Club> getClubDetails(@PathVariable Long clubId) {
+        return clubService.getClubById(clubId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @PostMapping
