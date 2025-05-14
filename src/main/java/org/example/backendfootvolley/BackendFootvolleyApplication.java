@@ -1,8 +1,9 @@
 package org.example.backendfootvolley;
 
+import org.example.backendfootvolley.model.Contact;
 import org.example.backendfootvolley.model.Scope;
-import org.example.backendfootvolley.model.UserProfile;
-import org.example.backendfootvolley.repository.UserProfileRepository;
+import org.example.backendfootvolley.model.UserAccount;
+import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,13 +20,17 @@ public class BackendFootvolleyApplication {
 
     @Profile("dev")
     @Bean
-    public CommandLineRunner test(UserProfileRepository userProfileRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner test(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            UserProfile admin = new UserProfile();
-            admin.setUsername("admin@admin.net");
-            admin.setPassword("{bcrypt}" + passwordEncoder.encode("admin123"));
-            admin.setScope(Scope.ADMIN);
-            userProfileRepository.save(admin);
+            Contact contact = new Contact();
+            contact.setEmail("admin@admin.net");
+            contact.setFirstName("");
+            contact.setLastName("");
+            UserAccount userAccount = new UserAccount();
+            userAccount.setContact(contact);
+            userAccount.setPassword("{bcrypt}" + passwordEncoder.encode("admin123"));
+            userAccount.setScope(Scope.ADMIN);
+            userAccountRepository.save(userAccount);
         };
 
     }
