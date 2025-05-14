@@ -12,7 +12,7 @@ public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(unique = true, nullable = false)
     private Contact contact;
     @JsonIgnore // For extra safety
