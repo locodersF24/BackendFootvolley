@@ -3,27 +3,34 @@ package org.example.backendfootvolley.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.NewUserAccount;
 import org.example.backendfootvolley.model.*;
-import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
+import org.example.backendfootvolley.service.ClubService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/clubs")
 public class ClubController {
 
-    private final ClubRepository clubRepository;
+    private final ClubService clubService;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @GetMapping
+    public ResponseEntity<List<Club>> getAllClubs() {
+        return ResponseEntity.ok(clubService.getAllClubs());
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Club> getById(@PathVariable Long id) {
-        return clubRepository
-                .findById(id)
+        return clubService
+                .getClubById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

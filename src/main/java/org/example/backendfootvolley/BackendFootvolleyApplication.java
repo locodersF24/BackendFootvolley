@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Set;
-
 @SpringBootApplication
 public class BackendFootvolleyApplication {
 
@@ -29,26 +27,8 @@ public class BackendFootvolleyApplication {
             UserAccount userAccount = new UserAccount();
             userAccount.setContact(contact);
             userAccount.setPassword("{bcrypt}" + passwordEncoder.encode("admin123"));
-            userAccount.setScope(Scope.CLUB);
-
-            Club club = new Club();
-            City city = new City();
-            Player player = new Player();
-
-            city.setCountry("DK");
-            city.setName("Copenhagen");
-
-            club.setName("copenhagen footvolley");
-            club.setEstablished("2020");
-            club.setCity(city);
-
-
-            player.setContact(contact);
-            player.setClubs(Set.of(club));
-
-            userAccount.setClub(club);
+            userAccount.setScope(Scope.ADMIN);
             userAccountRepository.save(userAccount);
-
         };
 
     }
