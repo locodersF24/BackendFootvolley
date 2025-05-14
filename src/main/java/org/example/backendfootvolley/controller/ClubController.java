@@ -26,7 +26,7 @@ public class ClubController {
     private final ClubService clubService;
 
     @PreAuthorize("hasAuthority('SCOPE_CLUB')")
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<Club> getByToken(Principal principal) {
         System.out.println(principal.getName());
         return userAccountRepository
@@ -45,12 +45,13 @@ public class ClubController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<List<Club>> getAllClubs() {
         return ResponseEntity.ok(clubService.getAllClubs());
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping("/{clubId}")
     public ResponseEntity<Club> getClubDetails(@PathVariable Long clubId) {
         return clubService.getClubById(clubId)
