@@ -13,6 +13,8 @@ public class Club {
     private Long id;
     @Column(unique = true, nullable = false)
     private String name;
+    @Column(columnDefinition = "CHAR(4)", nullable = false)
+    private String established;
     @OneToOne
     @JoinColumn(unique = true, nullable = false)
     private City city;
