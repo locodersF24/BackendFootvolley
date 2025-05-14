@@ -14,9 +14,13 @@ import java.util.List;
 @ToString
 public class UserAccountDTO {
 
+    private String email;
     private String firstName;
     private String lastName;
-    private String email;
+    private String clubName;
+    private String established;
+    private String country;
+    private String city;
     private String password; // Request only
     private String role; // Response only
 
@@ -28,8 +32,12 @@ public class UserAccountDTO {
     }
 
     public boolean containsUnexpectedInput() {
-        if (firstName == null || lastName == null || email == null || password == null) return true;
-        List<String> input = List.of(firstName, lastName, email, password);
+        List<String> input = List.of(email, firstName, lastName, clubName, established, country, city, password);
+        for (String s : input) {
+            if (s == null) {
+                return true;
+            }
+        }
         return input.contains("null") || input.contains("undefined");
     }
 
