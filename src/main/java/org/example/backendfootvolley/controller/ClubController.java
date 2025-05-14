@@ -33,7 +33,6 @@ public class ClubController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<Club> getById(@PathVariable Long id) {
         return clubRepository
