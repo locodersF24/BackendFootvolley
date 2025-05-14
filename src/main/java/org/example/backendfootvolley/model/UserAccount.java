@@ -12,7 +12,7 @@ public class UserAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(unique = true, nullable = false)
     private Contact contact;
     @JsonIgnore // For extra safety
@@ -21,6 +21,6 @@ public class UserAccount {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Scope scope;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Club club;
 }
