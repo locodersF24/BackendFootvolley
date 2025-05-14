@@ -3,6 +3,7 @@ package org.example.backendfootvolley.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.example.backendfootvolley.model.UserAccount;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class UserAccountDTO {
 
     private String firstName;
@@ -26,11 +28,12 @@ public class UserAccountDTO {
     }
 
     public boolean containsUnexpectedInput() {
+        if (firstName == null || lastName == null || email == null || password == null) return true;
         List<String> input = List.of(firstName, lastName, email, password);
-        return input.contains(null) || input.contains("null") || input.contains("undefined");
+        return input.contains("null") || input.contains("undefined");
     }
 
-    public boolean hasInvalidEmail() {
+    public boolean hasValidEmail() {
         int i = email.lastIndexOf("@");
         int j = email.lastIndexOf(".");
         return i > 0 && j > 2 && i < j && email.length() - j > 2;

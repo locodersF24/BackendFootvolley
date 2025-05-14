@@ -5,7 +5,6 @@ import org.example.backendfootvolley.model.UserAccount;
 import org.example.backendfootvolley.dto.UserAccountDTO;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.TokenService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,9 +22,9 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserAccountRepository userAccountRepository;
 
-    @PreAuthorize("permitAll()")
     @PostMapping("/token")
     public String token(@RequestBody UserAccountDTO userAccountDTO) throws AuthenticationException {
+        System.out.println(userAccountDTO);
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userAccountDTO.getEmail(), userAccountDTO.getPassword()));
         return tokenService.generateToken(authentication);
     }
