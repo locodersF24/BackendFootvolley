@@ -2,10 +2,7 @@ package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.UserAccountDTO;
-import org.example.backendfootvolley.model.Club;
-import org.example.backendfootvolley.model.Contact;
-import org.example.backendfootvolley.model.Scope;
-import org.example.backendfootvolley.model.UserAccount;
+import org.example.backendfootvolley.model.*;
 import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.springframework.http.HttpStatus;
@@ -28,6 +25,7 @@ public class ClubController {
     @PreAuthorize("hasAuthority('SCOPE_CLUB')")
     @GetMapping
     public ResponseEntity<Club> getByToken(Principal principal) {
+        System.out.println(principal.getName());
         return userAccountRepository
                 .findByContact_Email(principal.getName())
                 .map(UserAccount::getClub)
@@ -47,13 +45,14 @@ public class ClubController {
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @PostMapping
     public ResponseEntity<String> register(@RequestBody UserAccountDTO userAccountDTO) {
+        System.out.println(userAccountDTO);
         if (userAccountDTO == null || userAccountDTO.containsUnexpectedInput()) {
             return new ResponseEntity<>("Unexpected input.", HttpStatus.BAD_REQUEST);
         }
         if (userAccountDTO.getPassword().isEmpty()) {
             return new ResponseEntity<>("No password.", HttpStatus.BAD_REQUEST);
         }
-        if (userAccountDTO.hasInvalidEmail()) {
+        if (!userAccountDTO.hasValidEmail()) {
             return new ResponseEntity<>("No valid email.", HttpStatus.BAD_REQUEST);
         }
         if (userAccountRepository.existsByContact_Email(userAccountDTO.getEmail())) {
@@ -70,5 +69,4 @@ public class ClubController {
         userAccountRepository.save(userAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 }
