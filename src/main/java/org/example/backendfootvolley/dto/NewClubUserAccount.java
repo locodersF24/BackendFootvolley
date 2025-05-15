@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class NewUserAccount {
+public class NewClubUserAccount {
 
     private String email;
     private String firstName;
