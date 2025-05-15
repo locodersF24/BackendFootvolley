@@ -1,6 +1,7 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backendfootvolley.dto.PlayerDTO;
 import org.example.backendfootvolley.model.Club;
 import org.example.backendfootvolley.model.Player;
 import org.example.backendfootvolley.model.UserAccount;
@@ -83,6 +84,32 @@ public class ClubPlayerController {
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @PutMapping
+    public ResponseEntity<Player> editPlayer(Principal principal, @RequestBody PlayerDTO updatedPlayer) {
+        Optional<Player> optional = playerRepository.findById(updatedPlayer.getId());
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Player existingPlayer = optional.get();
+        Club club = userAccountRepository
+                .findByContact_Email(principal.getName())
+                .get()
+                .getClub();
+        if (!existingPlayer.getClubs().contains(club)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        existingPlayer.getContact().setFirstName(updatedPlayer.getFirstName());
+        existingPlayer.getContact().setLastName(updatedPlayer.getLastName());
+        existingPlayer.getContact().setEmail(updatedPlayer.getEmail());
+        existingPlayer.setNickName(updatedPlayer.getNickName());
+
+        Player player = playerRepository.save(existingPlayer);
+
+        return ResponseEntity.ok(player);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePlayer(Principal principal, @PathVariable Long id) {
