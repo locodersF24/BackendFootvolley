@@ -1,8 +1,10 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backendfootvolley.dto.NewUserAccount;
+import org.example.backendfootvolley.dto.NewClubUserAccount;
 import org.example.backendfootvolley.model.*;
+import org.example.backendfootvolley.repository.ClubRepository;
+import org.example.backendfootvolley.repository.ContactRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.ClubService;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ClubController {
 
     private final ClubService clubService;
+    private final ContactRepository contactRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -37,35 +40,37 @@ public class ClubController {
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @PostMapping
-    public ResponseEntity<String> register(@RequestBody NewUserAccount newUserAccount) {
-        System.out.println(newUserAccount);
-        if (newUserAccount == null || newUserAccount.containsUnexpectedInput()) {
+    public ResponseEntity<String> register(@RequestBody NewClubUserAccount newClubUserAccount) {
+        if (newClubUserAccount == null || newClubUserAccount.containsUnexpectedInput()) {
             return new ResponseEntity<>("Unexpected input.", HttpStatus.BAD_REQUEST);
         }
-        if (newUserAccount.getPassword().isEmpty()) {
+        if (newClubUserAccount.getPassword().isEmpty()) {
             return new ResponseEntity<>("No password.", HttpStatus.BAD_REQUEST);
         }
-        if (!newUserAccount.hasValidEmail()) {
+        if (!newClubUserAccount.hasValidEmail()) {
             return new ResponseEntity<>("No valid email.", HttpStatus.BAD_REQUEST);
         }
-        if (userAccountRepository.existsByContact_Email(newUserAccount.getEmail())) {
+        if (userAccountRepository.existsByContact_Email(newClubUserAccount.getEmail())) {
             return new ResponseEntity<>("There is already an account with that email.", HttpStatus.CONFLICT);
         }
         City city = new City();
-        city.setCountry(newUserAccount.getCountry());
-        city.setName(newUserAccount.getCity());
+        city.setCountry(newClubUserAccount.getCountry());
+        city.setName(newClubUserAccount.getCity());
         Club club = new Club();
         club.setCity(city);
-        club.setName(newUserAccount.getClubName());
-        club.setEstablished(newUserAccount.getEstablished());
+        club.setName(newClubUserAccount.getClubName());
+        club.setEstablished(newClubUserAccount.getEstablished());
         Contact contact = new Contact();
-        contact.setEmail(newUserAccount.getEmail());
-        contact.setFirstName(newUserAccount.getFirstName());
-        contact.setLastName(newUserAccount.getLastName());
+        contact.setEmail(newClubUserAccount.getEmail());
+        contact.setFirstName(newClubUserAccount.getFirstName());
+        contact.setLastName(newClubUserAccount.getLastName());
+        contactRepository
+                .findByEmail(newClubUserAccount.getEmail())
+                .ifPresent(value -> contact.setId(value.getId()));
         UserAccount userAccount = new UserAccount();
         userAccount.setContact(contact);
         userAccount.setClub(club);
-        userAccount.setPassword("{bcrypt}" + passwordEncoder.encode(newUserAccount.getPassword()));
+        userAccount.setPassword("{bcrypt}" + passwordEncoder.encode(newClubUserAccount.getPassword()));
         userAccount.setScope(Scope.CLUB);
         userAccountRepository.save(userAccount);
         return new ResponseEntity<>(HttpStatus.CREATED);
