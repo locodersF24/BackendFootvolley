@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -18,7 +17,7 @@ public class Tournament {
     private String location; // Should this be an entity like "Address"?
     private String city;
     @ElementCollection
-    private List<Integer> pointsAtStake;
+    private Set<Integer> pointsAtStake;
     private LocalDate qualificationStartDate;
     private LocalDate qualificationEndDate;
     @Column(nullable = false)

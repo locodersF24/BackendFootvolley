@@ -3,7 +3,6 @@ package org.example.backendfootvolley.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.NewClubUserAccount;
 import org.example.backendfootvolley.model.*;
-import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.ContactRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.ClubService;
@@ -14,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,11 +32,10 @@ public class ClubController {
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping("/{id}/players")
-    public ResponseEntity<List<Player>> getPlayersByClub(@PathVariable Long id) {
-        List<Player>players = clubService.getPlayersByClubId(id);
+    public ResponseEntity<Set<Player>> getPlayersByClub(@PathVariable Long id) {
+        Set<Player> players = clubService.getPlayersByClubId(id);
         return ResponseEntity.ok(players);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Club> getById(@PathVariable Long id) {
