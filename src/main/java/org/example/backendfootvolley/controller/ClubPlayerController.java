@@ -3,6 +3,7 @@ package org.example.backendfootvolley.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.PlayerDTO;
 import org.example.backendfootvolley.model.Club;
+import org.example.backendfootvolley.model.Contact;
 import org.example.backendfootvolley.model.Player;
 import org.example.backendfootvolley.model.UserAccount;
 import org.example.backendfootvolley.repository.ContactRepository;
@@ -53,18 +54,24 @@ public class ClubPlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createPlayer(Principal principal, @RequestBody Player player) {
-        if (player.getContact() == null || player.getContact().getEmail() == null) {
+    public ResponseEntity<Void> createPlayer(Principal principal, @RequestBody PlayerDTO playerDTO) {
+        if (playerDTO == null || playerDTO.getEmail() == null) {
             return ResponseEntity.badRequest().build();
         }
-        if (playerRepository.existsByContact_Email(player.getContact().getEmail())) {
+        if (playerRepository.existsByContact_Email(playerDTO.getEmail())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+        Player player = new Player();
+        player.setContact(new Contact());
         Club club = userAccountRepository.findByContact_Email(principal.getName()).get().getClub();
         player.setClubs(Set.of(club));
+        player.getContact().setFirstName(playerDTO.getFirstName());
+        player.getContact().setLastName(playerDTO.getLastName());
+        player.getContact().setEmail(playerDTO.getEmail());
+        player.setNickName(playerDTO.getNickName());
         contactRepository
-                .findByEmail(player.getContact().getEmail())
-                .ifPresent(value -> player.getContact().setId(value.getId()));
+                .findByEmail(playerDTO.getEmail())
+                .ifPresent(value -> playerDTO.setId(value.getId()));
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
