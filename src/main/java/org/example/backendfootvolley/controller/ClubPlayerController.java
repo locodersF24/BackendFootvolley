@@ -91,6 +91,7 @@ public class ClubPlayerController {
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+
         Player existingPlayer = optional.get();
         Club club = userAccountRepository
                 .findByContact_Email(principal.getName())
