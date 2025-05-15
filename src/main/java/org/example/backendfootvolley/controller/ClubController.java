@@ -27,6 +27,7 @@ public class ClubController {
         return ResponseEntity.ok(clubService.getAllClubs());
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping("/{id}/players")
     public ResponseEntity<List<Player>> getPlayersByClub(@PathVariable Long id) {
         List<Player>players = clubService.getPlayersByClubId(id);
