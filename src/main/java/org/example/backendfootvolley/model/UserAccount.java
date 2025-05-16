@@ -15,7 +15,7 @@ public class UserAccount {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(unique = true, nullable = false)
     private Contact contact;
-    @JsonIgnore // For extra safety
+    @JsonIgnore // For extra safety. Never use UserAccount in requests and responses.
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
