@@ -53,6 +53,12 @@ public class TournamentService {
         tournament.setHost(hostClub);
         tournament.setLeague(league);
 
+
+        tournament.setCity(hostClub.getCity());
+
+
+        tournament.setCurrency("EUR");
+
         return tournamentRepository.save(tournament);
     }
 }

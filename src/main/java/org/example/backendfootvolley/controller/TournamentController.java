@@ -33,7 +33,7 @@ public class TournamentController {
 
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     public ResponseEntity<?> createTournament(@Valid @RequestBody CreateTournamentDTO dto) {
         Tournament created = tournamentService.createTournament(dto);
 
