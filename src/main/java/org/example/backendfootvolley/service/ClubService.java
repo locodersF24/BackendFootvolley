@@ -29,10 +29,8 @@ public class ClubService {
     }
 
     public boolean deleteClub(Long id) {
-        if(!clubRepository.existsById(id)) {
-            return false;
-        }
+        boolean exists = clubRepository.existsById(id);
         clubRepository.deleteById(id);
-        return true;
+        return exists;
     }
 }
