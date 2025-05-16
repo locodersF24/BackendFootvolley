@@ -28,4 +28,9 @@ public class ClubService {
         return clubRepository.findById(clubId).get().getPlayers();
     }
 
+    public boolean deleteClub(Long id) {
+        boolean exists = clubRepository.existsById(id);
+        clubRepository.deleteById(id);
+        return exists;
+    }
 }
