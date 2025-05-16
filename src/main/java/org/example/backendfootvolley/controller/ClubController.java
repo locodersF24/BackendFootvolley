@@ -3,6 +3,7 @@ package org.example.backendfootvolley.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.backendfootvolley.dto.NewClubUserAccount;
 import org.example.backendfootvolley.model.*;
+import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.ContactRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.ClubService;
@@ -12,7 +13,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ import java.util.Set;
 public class ClubController {
 
     private final ClubService clubService;
+    private final ClubRepository clubRepository;
     private final ContactRepository contactRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -44,6 +48,32 @@ public class ClubController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PutMapping
+    public ResponseEntity<Club> editClubInfo(Principal principal, @RequestBody Club updatedClub) {
+        Optional<Club> optional = clubRepository.findById(updatedClub.getId());
+        if (optional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Club existingClub = optional.get();
+        Club clubCheck = userAccountRepository
+                .findByContact_Email(principal.getName())
+                .get()
+                .getClub();
+        if (!existingClub.equals(clubCheck)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        existingClub.setName(updatedClub.getName());
+        existingClub.setEstablished(updatedClub.getEstablished());
+        existingClub.setLogoBlobUrl(updatedClub.getLogoBlobUrl());
+        existingClub.setNationalFederation(updatedClub.getNationalFederation());
+
+        Club club = clubRepository.save(existingClub);
+
+        return ResponseEntity.ok(club);
+    }
+
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @PostMapping
