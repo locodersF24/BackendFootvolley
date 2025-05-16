@@ -28,7 +28,7 @@ public class Tournament {
     @ManyToMany
     private Set<Partner> partners;
     @ElementCollection
-    private Set<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
+    private List<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
     @Column(columnDefinition = "CHAR(3)", nullable = false)
     private String currency; // ISO 4217
     @ManyToOne

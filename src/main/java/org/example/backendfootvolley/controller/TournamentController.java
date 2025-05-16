@@ -1,13 +1,14 @@
 package org.example.backendfootvolley.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.backendfootvolley.dto.CreateTournamentDTO;
 import org.example.backendfootvolley.model.Tournament;
 import org.example.backendfootvolley.service.TournamentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +30,21 @@ public class TournamentController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<?> createTournament(@Valid @RequestBody CreateTournamentDTO dto) {
+        Tournament created = tournamentService.createTournament(dto);
+
+        if (created != null && created.getId() != null) {
+            return ResponseEntity.ok("Tournament created successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to create tournament");
+        }
+
+    }
+
 
 }
