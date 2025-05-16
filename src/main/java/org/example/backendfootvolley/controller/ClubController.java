@@ -87,12 +87,11 @@ public class ClubController {
 
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteClub(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteClub(@PathVariable Long id) {
         if (!clubService.deleteClub(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Club with ID " + id + " not found");
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok("Club with ID " + id + " has been deleted");
+        return ResponseEntity.noContent().build();
     }
 
 }
