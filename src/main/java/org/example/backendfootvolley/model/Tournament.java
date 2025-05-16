@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,9 +16,11 @@ public class Tournament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String location; // Should this be an entity like "Address"?
-    private String city;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private City city;
     @ElementCollection
-    private Set<Integer> pointsAtStake;
+    private List<Integer> pointsAtStake;
     private LocalDate qualificationStartDate;
     private LocalDate qualificationEndDate;
     @Column(nullable = false)
@@ -27,7 +30,7 @@ public class Tournament {
     @ManyToMany
     private Set<Partner> partners;
     @ElementCollection
-    private Set<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
+    private List<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
     @Column(columnDefinition = "CHAR(3)", nullable = false)
     private String currency; // ISO 4217
     @ManyToOne
