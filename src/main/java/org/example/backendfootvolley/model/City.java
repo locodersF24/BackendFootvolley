@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class City {
+public class City implements Comparable<City> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,4 +15,9 @@ public class City {
     private String name;
     @Column(columnDefinition = "CHAR(2)", nullable = false)
     private String country; // ISO 3166-1 alpha-2
+
+    @Override
+    public int compareTo(City city) {
+        return name.compareTo(city.getName());
+    }
 }
