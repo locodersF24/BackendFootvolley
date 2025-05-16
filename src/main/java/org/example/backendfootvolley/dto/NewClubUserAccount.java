@@ -3,23 +3,31 @@ package org.example.backendfootvolley.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 public class NewClubUserAccount {
 
+    private String password;
+    private String clubName;
+    private String established;
     private String email;
     private String firstName;
     private String lastName;
-    private String clubName;
-    private String established;
+    // These
     private String country;
-    private String city;
-    private String password;
+    private String cityName;
+    // or this
+    private Long cityId;
 
     public boolean containsUnexpectedInput() {
-        List<String> input = List.of(email, firstName, lastName, clubName, established, country, city, password);
+        List<String> input = new ArrayList<>(List.of(password,email, firstName, lastName, clubName, established));
+        if (cityId == null) {
+            input.add(country);
+            input.add(cityName);
+        }
         for (String s : input) {
             if (s == null) {
                 return true;
