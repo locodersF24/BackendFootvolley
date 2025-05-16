@@ -1,10 +1,12 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backendfootvolley.dto.ClubDTO;
 import org.example.backendfootvolley.dto.NewClubUserAccount;
 import org.example.backendfootvolley.model.*;
 import org.example.backendfootvolley.repository.ClubRepository;
 import org.example.backendfootvolley.repository.ContactRepository;
+import org.example.backendfootvolley.repository.NationalFederationRepository;
 import org.example.backendfootvolley.repository.UserAccountRepository;
 import org.example.backendfootvolley.service.ClubService;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,7 @@ public class ClubController {
     private final ContactRepository contactRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final NationalFederationRepository nationalFederationRepository;
 
     @GetMapping
     public ResponseEntity<List<Club>> getAllClubs() {
@@ -50,7 +53,7 @@ public class ClubController {
     }
 
     @PutMapping
-    public ResponseEntity<Club> editClubInfo(Principal principal, @RequestBody Club updatedClub) {
+    public ResponseEntity<Club> editClubInfo(Principal principal, @RequestBody ClubDTO updatedClub) {
         Optional<Club> optional = clubRepository.findById(updatedClub.getId());
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -64,10 +67,14 @@ public class ClubController {
         if (!existingClub.equals(clubCheck)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        existingClub.getCity().setName(updatedClub.getCity());
         existingClub.setName(updatedClub.getName());
         existingClub.setEstablished(updatedClub.getEstablished());
         existingClub.setLogoBlobUrl(updatedClub.getLogoBlobUrl());
-        existingClub.setNationalFederation(updatedClub.getNationalFederation());
+
+        nationalFederationRepository.findById(updatedClub.getNationalFederationId());
+
 
         Club club = clubRepository.save(existingClub);
 

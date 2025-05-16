@@ -10,9 +10,10 @@ import org.example.backendfootvolley.model.NationalFederation;
 @Setter
 public class ClubDTO {
     private Long id;
-    private String name;
+    private String city;
+    private String name; //club name
     private String established;
     private String logoBlobUrl;
-    private NationalFederation nationalFederation;
+    private Integer nationalFederationId;
 
 }

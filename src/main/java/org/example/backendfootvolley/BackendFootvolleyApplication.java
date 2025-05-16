@@ -29,6 +29,10 @@ public class BackendFootvolleyApplication {
             userAccount.setPassword("{bcrypt}" + passwordEncoder.encode("admin123"));
             userAccount.setScope(Scope.ADMIN);
             userAccountRepository.save(userAccount);
+            NationalFederation nationalFederation = new NationalFederation();
+            nationalFederation.setName("DBU");
+            nationalFederation.setCountry("DK");
+            nationalFederation.setLogoBlobUrl("logoblobDBU");
         };
 
     }
