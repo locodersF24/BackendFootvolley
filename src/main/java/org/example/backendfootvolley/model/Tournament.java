@@ -3,6 +3,7 @@ package org.example.backendfootvolley.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,12 +16,12 @@ public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String location; // Should this be an entity like "Address"?
+    private String location;
     @ManyToOne
     @JoinColumn(nullable = false)
     private City city;
-    @ElementCollection
-    private List<Integer> pointsAtStake;
+    @Column(nullable = false)
+    private Integer pointsAtStake;
     private LocalDate qualificationStartDate;
     private LocalDate qualificationEndDate;
     @Column(nullable = false)
@@ -31,7 +32,7 @@ public class Tournament {
     private Set<Partner> partners;
     @ElementCollection
     private List<Integer> prizeMoney; // Lowest monetary unit (like cent for euro etc.)
-    @Column(columnDefinition = "CHAR(3)", nullable = false)
+    @Column(columnDefinition = "CHAR(3)")
     private String currency; // ISO 4217
     @ManyToOne
     @JoinColumn(nullable = false)

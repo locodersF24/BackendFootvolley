@@ -10,7 +10,7 @@ import lombok.Setter;
 public class League {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(columnDefinition = "CHAR(4)", nullable = false)
     private String seasonYear; // Variable name can't be "year"
     @Column(nullable = false)

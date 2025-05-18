@@ -10,8 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,11 +21,10 @@ public class ClubController {
     private final ClubService clubService;
 
     @GetMapping
-    public ResponseEntity<List<Club>> getAllClubs() {
+    public ResponseEntity<SortedSet<Club>> getAllClubs() {
         return ResponseEntity.ok(clubService.getAllClubs());
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping("/{id}/players")
     public ResponseEntity<Set<Player>> getPlayersByClub(@PathVariable Long id) {
         Set<Player> players = clubService.getPlayersByClubId(id);
@@ -40,6 +39,7 @@ public class ClubController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAuthority('SCOPE_CLUB')")
     @PutMapping
     public ResponseEntity<Club> editClubInfo(Principal principal, @RequestBody Club club) {
         Club savedClub = clubService.updateClub(principal.getName(), club);

@@ -39,7 +39,7 @@ public class AuthController {
         me.setEmail(userAccount.getContact().getEmail());
         me.setRole(userAccount.getScope().toString());
         if (userAccount.getScope() == Scope.CLUB) {
-            me.setId(userAccount.getClub().getId());
+            me.setClubId(userAccount.getClub().getId());
         }
         return me;
     }

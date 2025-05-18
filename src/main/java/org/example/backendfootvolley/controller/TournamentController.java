@@ -1,8 +1,6 @@
 package org.example.backendfootvolley.controller;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.backendfootvolley.dto.CreateTournamentDTO;
 import org.example.backendfootvolley.model.Tournament;
 import org.example.backendfootvolley.service.TournamentService;
 import org.springframework.http.HttpStatus;
@@ -31,20 +29,11 @@ public class TournamentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
     @PostMapping
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<?> createTournament(@Valid @RequestBody CreateTournamentDTO dto) {
-        Tournament created = tournamentService.createTournament(dto);
-
-        if (created != null && created.getId() != null) {
-            return ResponseEntity.ok("Tournament created successfully");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Failed to create tournament");
-        }
-
+    public ResponseEntity<Tournament> createTournament(@RequestBody Tournament tournament) {
+        tournamentService.createTournament(tournament);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
-
 
 }
