@@ -1,6 +1,8 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backendfootvolley.model.Category;
+import org.example.backendfootvolley.model.PointsAtStake;
 import org.example.backendfootvolley.model.Tournament;
 import org.example.backendfootvolley.service.TournamentService;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,11 @@ import java.util.List;
 public class TournamentController {
 
     private final TournamentService tournamentService;
+
+    @GetMapping("/points")
+    public ResponseEntity<PointsAtStake[]> getAllPointsAtStake() {
+        return ResponseEntity.ok(PointsAtStake.values());
+    }
 
     @GetMapping
     public ResponseEntity<List<Tournament>> viewAllTournaments() {

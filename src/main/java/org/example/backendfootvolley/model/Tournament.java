@@ -1,5 +1,7 @@
 package org.example.backendfootvolley.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +23,8 @@ public class Tournament {
     @JoinColumn(nullable = false)
     private City city;
     @Column(nullable = false)
-    private Integer pointsAtStake;
+    @Enumerated(EnumType.STRING)
+    private PointsAtStake pointsAtStake;
     private LocalDate qualificationStartDate;
     private LocalDate qualificationEndDate;
     @Column(nullable = false)
@@ -40,4 +43,9 @@ public class Tournament {
     @ManyToOne
     @JoinColumn(nullable = false)
     private League league;
+
+    @JsonSetter("pointsAtStake")
+    public void setPointsAtStake(int pointsAtStake) {
+        this.pointsAtStake = PointsAtStake.parse(pointsAtStake);
+    }
 }
