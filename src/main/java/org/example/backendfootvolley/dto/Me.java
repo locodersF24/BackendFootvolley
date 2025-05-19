@@ -10,5 +10,5 @@ import lombok.Setter;
 public class Me {
     private String email;
     private String role;
-    private Long id;
+    private Long clubId;
 }

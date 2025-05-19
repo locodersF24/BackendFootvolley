@@ -1,9 +1,7 @@
 package org.example.backendfootvolley.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backendfootvolley.dto.PlayerDTO;
 import org.example.backendfootvolley.model.Club;
-import org.example.backendfootvolley.model.Contact;
 import org.example.backendfootvolley.model.Player;
 import org.example.backendfootvolley.model.UserAccount;
 import org.example.backendfootvolley.repository.ContactRepository;
@@ -54,24 +52,18 @@ public class ClubPlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createPlayer(Principal principal, @RequestBody PlayerDTO playerDTO) {
-        if (playerDTO == null || playerDTO.getEmail() == null) {
+    public ResponseEntity<Void> createPlayer(Principal principal, @RequestBody Player player) {
+        if (player == null || player.getContact().getEmail() == null) {
             return ResponseEntity.badRequest().build();
         }
-        if (playerRepository.existsByContact_Email(playerDTO.getEmail())) {
+        if (playerRepository.existsByContact_Email(player.getContact().getEmail())) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-        Player player = new Player();
-        player.setContact(new Contact());
         Club club = userAccountRepository.findByContact_Email(principal.getName()).get().getClub();
         player.setClubs(Set.of(club));
-        player.getContact().setFirstName(playerDTO.getFirstName());
-        player.getContact().setLastName(playerDTO.getLastName());
-        player.getContact().setEmail(playerDTO.getEmail());
-        player.setNickName(playerDTO.getNickName());
         contactRepository
-                .findByEmail(playerDTO.getEmail())
-                .ifPresent(value -> playerDTO.setId(value.getId()));
+                .findByEmail(player.getContact().getEmail())
+                .ifPresent(value -> player.getContact().setId(value.getId()));
         playerRepository.save(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -93,13 +85,18 @@ public class ClubPlayerController {
     }
 
     @PutMapping
-    public ResponseEntity<Player> editPlayer(Principal principal, @RequestBody PlayerDTO updatedPlayer) {
+    public ResponseEntity<Player> editPlayer(Principal principal, @RequestBody Player updatedPlayer) {
+        if (updatedPlayer.getId() == null) {
+            return ResponseEntity.notFound().build();
+        }
         Optional<Player> optional = playerRepository.findById(updatedPlayer.getId());
         if (optional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
         Player existingPlayer = optional.get();
+        if (updatedPlayer.getContact().getId() != null && !updatedPlayer.getContact().getId().equals(existingPlayer.getContact().getId())) {
+            return ResponseEntity.badRequest().build();
+        }
         Club club = userAccountRepository
                 .findByContact_Email(principal.getName())
                 .get()
@@ -107,14 +104,11 @@ public class ClubPlayerController {
         if (!existingPlayer.getClubs().contains(club)) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        existingPlayer.getContact().setFirstName(updatedPlayer.getFirstName());
-        existingPlayer.getContact().setLastName(updatedPlayer.getLastName());
-        existingPlayer.getContact().setEmail(updatedPlayer.getEmail());
+        existingPlayer.getContact().setFirstName(updatedPlayer.getContact().getFirstName());
+        existingPlayer.getContact().setLastName(updatedPlayer.getContact().getLastName());
+        existingPlayer.getContact().setEmail(updatedPlayer.getContact().getEmail());
         existingPlayer.setNickName(updatedPlayer.getNickName());
-
         Player player = playerRepository.save(existingPlayer);
-
         return ResponseEntity.ok(player);
     }
 
