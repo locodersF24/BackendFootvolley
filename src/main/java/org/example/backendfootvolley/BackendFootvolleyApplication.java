@@ -16,7 +16,7 @@ public class BackendFootvolleyApplication {
         SpringApplication.run(BackendFootvolleyApplication.class, args);
     }
 
-    @Profile("dev")
+    @Profile({"dev", "test"})
     @Bean
     public CommandLineRunner test(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
         return args -> {
