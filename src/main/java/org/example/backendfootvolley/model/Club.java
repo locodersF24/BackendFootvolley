@@ -5,9 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@ToString // remove
 public class Club implements Comparable<Club> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +39,7 @@ public class Club implements Comparable<Club> {
     }
 
     @Override
-    public int compareTo(@NotNull Club club) {
+    public int compareTo(Club club) {
         return name.compareTo(club.getName());
     }
 }
