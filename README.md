@@ -1,8 +1,8 @@
 # Footvolley Event Planner
 
-A full-stack web application for organizing, managing, and participating in footvolley events. This platform enables
-event organizers to create tournaments, manage teams and match schedules, and provide participants with an easy
-interface to engage with events.
+A full-stack web application for organizing, managing, and participating in footvolley events.
+This platform enables clubs to register teams, manage players,
+and host or participate in tournaments—all under the supervision of an admin for controlled access and security.
 
 ## Features
 
