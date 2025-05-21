@@ -22,3 +22,5 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B test
+      env:
+        JWT_KEY: ${{ secrets.JWT_KEY }}
