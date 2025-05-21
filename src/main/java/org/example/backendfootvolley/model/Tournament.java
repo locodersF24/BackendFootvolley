@@ -45,7 +45,7 @@ public class Tournament {
     private League league;
 
     @JsonSetter("pointsAtStake")
-    public void setPointsAtStake(int pointsAtStake) {
+    public void setPointsAtStakeFromJson(int pointsAtStake) {
         this.pointsAtStake = PointsAtStake.parse(pointsAtStake);
     }
 }
