@@ -3,9 +3,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [ "production", "development" ]
   pull_request:
-    branches: [ "production" ]
+    branches: [ "production", "development" ]
 
 jobs:
   build:
@@ -22,3 +22,5 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B test
+      env:
+        JWT_KEY: ${{ secrets.JWT_KEY }}
